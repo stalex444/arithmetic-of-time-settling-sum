@@ -1,0 +1,96 @@
+pisot-sum -- kernel build record, 2026-11-03 (supersedes the 2026-11-02 record of the library alone)
+Toolchain: leanprover/lean4:v4.35.0-rc2
+  lean --version: Lean (version 4.35.0-rc2, arm64-apple-darwin24.6.0,
+                  commit 11acb17ec6b07a8f9e9173e6845197929540936b, Release)
+Mathlib rev: 065356127b1dc0016f66b7283ce0ce2c4055aa55
+  lake-manifest: copied from ~/palomar-entries/coxeter-growth (same pin; package name pisot_sum)
+  .lake/packages: symlink -> ~/palomar-entries/coxeter-growth/.lake/packages
+
+Build: lake build (defaultTargets PisotSum, PisotSumCubic, Challenge, Solution) -> Build completed
+  successfully (8938 jobs), exit 0. Only warnings: the 7 'declaration uses sorry' warnings of
+  Challenge.lean (lines 110, 115, 121, 127, 132, 140, 149: the compared placeholders). No warning in
+  PisotSum, PisotSumCubic or Solution (one unused-simp-argument lint in Solution was removed; rebuilt).
+  Module compile times: PisotSum 15 s, PisotSumCubic 14 s, Solution 2.6 s.
+  Fresh copy (rsync without .lake/.git/notes to a scratch dir, .lake/packages symlinked to the same
+  built Mathlib): lake build exit 0, 8938 jobs, 18 s wall; every project module compiled from source
+  (Challenge 9.3 s, PisotSumCubic 9.8 s, PisotSum 10 s, Solution 2.5 s); warnings: 7, all Challenge.lean.
+  Token counts (whole-word grep, per file):
+    Challenge.lean      sorry=7 admit=0 native_decide=0 axiom=0
+    Solution.lean       sorry=0 admit=0 native_decide=0 axiom=0
+    PisotSum.lean       sorry=0 admit=0 native_decide=0 axiom=0
+    PisotSumCubic.lean  sorry=0 admit=0 native_decide=0 axiom=0
+  All four .lean modules use the module system (module / public import Mathlib / @[expose] public
+  section); Challenge.lean imports Mathlib only; Solution.lean imports Mathlib, PisotSum, PisotSumCubic.
+
+#print axioms (lake env lean Axioms.lean, Axioms.lean importing Solution):
+  'SettlingSum.plastic_settling_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'SettlingSum.plastic_tsum' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'SettlingSum.plastic_even_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'SettlingSum.perrin_round_threshold' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'SettlingSum.cubic_trace_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'SettlingSum.cubic_settling_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'SettlingSum.existsUnique_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+  Library (the theorems the seven transfer from):
+  'PisotSum.plastic_settling_sum_of_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'PisotSum.plastic_settling_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'PisotSum.plastic_tsum' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'PisotSum.existsUnique_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'PisotSum.abs_t_lt_half' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'PisotSum.cubic_hasSum_t_sq' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'PisotSum.cubic_settling_sum_of_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+  'PisotSum.cubic_settling_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Statement identity, Challenge vs Solution (7 theorems + 4 definitions: distInt, powerSum, perrin, geo)
+  Whitespace-normalised source text (comments stripped; theorem statements up to `:=`, definitions in
+    full): 11/11 identical; declaration docstrings 11/11 identical; the `open` line identical
+    (open Complex Finset ComplexConjugate); namespace SettlingSum in both; declaration order in
+    Solution = declaration order in Challenge = the comparator order.
+  Kernel terms: the comparator (below) exported the same 7 theorem constants and 4 definition constants
+    from a file importing only Challenge and from one importing only Solution, and both kernels accepted
+    the solution against the challenge.
+  Count gate: the Challenge docstring says "compares exactly these seven statements" and enumerates 1-7;
+    comparator.json has 7 theorem_names in that order; Challenge.lean has 7 `theorem` declarations, in
+    that order; definition_names = the 4 definitions of Challenge.lean. The word "sorry" occurs in
+    Challenge.lean exactly 7 times, all in proof bodies (the opening docstring does not contain it).
+
+Comparator
+  lake comparator --inadvisably-no-sandbox (toolchain bin with nanoda_bin on PATH), from the package root,
+    2026-11-03, after the final edit to Solution.lean:
+    "Building Challenge ... Build completed successfully (8932 jobs) / Exporting #[... SettlingSum.
+    plastic_settling_sum, ..., SettlingSum.existsUnique_root, ..., SettlingSum.distInt, SettlingSum.
+    powerSum, SettlingSum.perrin, SettlingSum.geo] from Challenge / Building Solution / Build completed
+    successfully (8934 jobs) / Exporting #[the same list] from Solution / nanoda kernel accepts the
+    solution / Lean default kernel accepts the solution / Your solution is okay!", exit 0 (29 s).
+  Not run: the registry's own verify_submission.py / submission workflow (needs the public commit); no
+    bubblewrap sandbox on macOS (hence --inadvisably-no-sandbox).
+
+Module provenance
+  PisotSum.lean, PisotSumCubic.lean: written 2026-11-02 as the author's proof library (a copy is kept in
+    the author's private repository). Changed here on 2026-11-03: (i) converted to the module system (three header lines each; no proof
+    changed); (ii) PisotSumCubic.lean gained `cubic_settling_sum_of_lt` (the ∃N theorem's body with the
+    threshold N and `‖α‖ ^ N < 1/4` made explicit hypotheses) and `cubic_settling_sum` now derives from
+    it; its statement is unchanged. Every previously existing name (plastic_settling_sum_of_root,
+    plastic_settling_sum, plastic_tsum, existsUnique_root, cubic_settling_sum, cubic_hasSum_t_sq) keeps
+    its statement.
+  Solution.lean, Axioms.lean, comparator.json: written for this entry, 2026-11-03. Solution.lean's private
+    bridges: distInt_eq, distInt_eq', geo_eq (rfl: same bodies), perrin_eq / perrin_eq_aux and
+    powerSum_eq / powerSum_eq_aux (induction on three consecutive values: same recurrences). Statement 3
+    (plastic_even_trace) and the n = 9 half of statement 4 are proved in Solution.lean itself; the rest
+    transfer.
+  Challenge.lean: the trusted surface. After the review of 2026-11-03 one word of its opening docstring
+    was corrected (the instance of statement 6 that gives statement 1 is N = 10, not N = 9; no statement,
+    definition or docstring of a declaration changed); the build, axioms and comparator were re-run after
+    the correction and the hashes below are of the corrected file.
+
+Files (sha256)
+  be7a01c27b790672648f82cb081fac127a284eb1affe4e298d2a302ddd127958  Challenge.lean
+  adfd0ce6bd6bd3cd3590f76b8c41d8b2f2b27cd0a1b9b86e5336e95fafe78466  Solution.lean
+  9f9f586e2d6159991d1e44911981991e03ce7265c73cb51b2e843e57f9c6d9de  PisotSum.lean
+  25a3bade348a22cf54ad959cd6267e7f8be4ab91a577b5201eec630a96a1ca74  PisotSumCubic.lean
+  5801d0839f8bc796612ee172af3989ad9a713f97c060e74a049d286dea083f6c  Axioms.lean
+  93f96c29f4e179413d2ae542fc493fc55dd49ec3d22862a7208d58c23ad2b573  comparator.json
+  36ce3db806d79e1230937d7a63166a6126da464a64b33c202a4d6592d84f7bec  lakefile.toml
+  8dc8d6f560141069d9073e370611716ef77ada0da8ffa37e2149f44b2e63ac7a  lean-toolchain
+  eebf3152b6218a3140cca45e08c8fca90f0e3b393b9bdfbc4aa9c128deda55ec  lake-manifest.json
+  (README.md, formalization.yaml, LICENSE, .github/ were written by another writer and are hashed at
+  commit time; see git.)

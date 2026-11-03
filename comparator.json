@@ -1,0 +1,21 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "SettlingSum.plastic_settling_sum",
+    "SettlingSum.plastic_tsum",
+    "SettlingSum.plastic_even_trace",
+    "SettlingSum.perrin_round_threshold",
+    "SettlingSum.cubic_trace_sum",
+    "SettlingSum.cubic_settling_sum",
+    "SettlingSum.existsUnique_root"
+  ],
+  "definition_names": [
+    "SettlingSum.distInt",
+    "SettlingSum.powerSum",
+    "SettlingSum.perrin",
+    "SettlingSum.geo"
+  ],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}
