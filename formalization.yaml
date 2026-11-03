@@ -297,7 +297,9 @@ review:
     symbolic reduction in Q(rho) and numerically to 60 digits before the
     formalization. An AI-assisted consistency, calibration and adversarial review of the
     assembled package (2026-11-03) found and corrected one informal
-    description (the instance N of statement 6).
+    description (the instance N of statement 6). The author read the seven
+    compared statements against their descriptions in the Challenge
+    docstring and approved them on 2026-11-03, after that correction.
 
 alignment:
   namespace: "SettlingSum"
