@@ -1,3 +1,4 @@
+module
 import Solution
 -- the seven compared statements
 #print axioms SettlingSum.plastic_settling_sum
