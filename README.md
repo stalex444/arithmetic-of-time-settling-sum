@@ -110,9 +110,11 @@ reduces to statement 3. That last step is a finite computation in `ℚ(ρ)` — 
 - The exact value `2ρ² + 3ρ − 2` is an algebraic integer because `ρ ± 1` are units (`f(±1) = −1`); the
   census shows other cubics acquiring denominators from `f(1)·f(−1)`. Only the `ρ` case is in the kernel.
 - Statements 2 and 7 are routine (the `tsum` form of 1; uniqueness of the real root).
-- The content is the exact value (statement 1), its mechanism (statement 3: the resolvent trace at `±1`
-  vanishes for `x³ − x − 1`, a principle, not a computation), the general cubic form (statements 5–6)
-  and the sharp threshold (statement 4). The three geometric series and the Perrin trace identity
+- The content first presented here is the exact value (statement 1), its mechanism (statement 3: the
+  resolvent trace at `±1` vanishes for `x³ − x − 1`, a principle, not a computation) and the general cubic
+  form (statements 5–6). Statement 4 is different in kind: its claim is prior work (R. Stephan's 2002
+  comment on OEIS A001608, stated there without proof), which this entry proves and shows sharp; the
+  provenance metadata records it so. The three geometric series and the Perrin trace identity
   `P(n) = ρⁿ + zⁿ + z̄ⁿ` are classical; the six-exception bookkeeping is a finite computation.
 
 ## Application to time (no compared statement asserts it)

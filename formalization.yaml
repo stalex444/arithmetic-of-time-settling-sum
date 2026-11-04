@@ -20,8 +20,9 @@ project:
     (x - 1) x (x + 1) - 1 makes the resolvent trace sum_{roots} 1/(1 - r^2)
     vanish. (4) For every n >= 10 the nearest integer to rho^n is the
     Perrin number P(n), and for n = 9 it is not (P(9) = 12, rho^9 = 12.56...):
-    the threshold recorded in OEIS A001608 (R. Stephan, 2002), proved and
-    shown sharp. (5) For a real theta, a complex alpha with ||alpha|| < 1,
+    the threshold recorded in OEIS A001608 (R. Stephan, 2002), a previously
+    published claim, proved here and shown sharp; of the seven statements
+    it is the one whose statement is prior work. (5) For a real theta, a complex alpha with ||alpha|| < 1,
     and integers a, b, c that are the elementary symmetric functions of
     (theta, alpha, conj alpha): sum_{n >= 1} (S_n - theta^n)^2 = Re(geo alpha),
     where S_n are the Newton power sums of x^3 - a x^2 + b x - c and
@@ -77,15 +78,20 @@ sources:
     note: >-
       ORIGIN DECLARATION (relationship "other" because the schema has no
       value for a result presented together with its formalization, with no
-      prior statement found in the recorded search).
-      Statements 1-6 were stated and proved for this entry: the identity
-      sum ||rho^n||^2 = rho was found and checked exactly in Q(rho) on
-      2026-11-02, the mechanism (statement 3, the vanishing resolvent trace)
-      on 2026-11-03; the exact Q(rho) computation and the census over 109
-      Pisot units of degree 2-4 are in the author's working notes. No prior
-      statement was found in the recorded search (README, 'Relation to the
-      literature'). Statement 7 is routine. The three geometric series and
-      the trace identity are classical and no novelty is claimed for them.
+      prior statement found in the recorded search). This declaration covers
+      statements 1, 2, 3, 5 and 6 ONLY. Statements 1-3, 5 and 6 were stated
+      and proved for this entry: the identity sum ||rho^n||^2 = rho was found
+      and checked exactly in Q(rho) on 2026-11-02, the mechanism (statement
+      3, the vanishing resolvent trace) on 2026-11-03; the exact Q(rho)
+      computation and the census over 109 Pisot units of degree 2-4 are in
+      the author's working notes. No prior statement of 1, 2, 3, 5 or 6 was
+      found in the recorded search (README, 'Relation to the literature').
+      Statement 4 is NOT covered by this declaration: it is a previously
+      published claim (OEIS A001608, comment of R. Stephan, 2002: round(rho^n)
+      = P(n) for n > 9), which this formalization proves and shows sharp; see
+      that source's entry below. Statement 7 is routine. The three geometric
+      series and the trace identity are classical and no novelty is claimed
+      for them.
     license: "MIT"
   - title: "La répartition modulo 1 et les nombres algébriques"
     authors:
@@ -143,11 +149,20 @@ sources:
     # Page opened 2026-11-02; the comment is quoted from it.
     type: "web post"
     location: "https://oeis.org/A001608"
-    relationship: "background"
+    relationship: "other"
     note: >-
-      The threshold from which the Perrin numbers are the nearest integers to
-      rho^n. Statement 4 proves the comment (n >= 10) and shows it sharp
-      (n = 9 fails). The page states no sum and no exception list.
+      PRIOR WORK SUBSTANTIVELY PROVED HERE, not background. The comment
+      states, without proof, the threshold from which the Perrin numbers are
+      the nearest integers to rho^n. Statement 4 (perrin_round_threshold)
+      proves that claim for every n >= 10 and shows it sharp (n = 9 fails);
+      statement 4 is therefore source-based on this comment and is excluded
+      from the original-proof declaration above, which covers statements
+      1-3, 5 and 6 only. The relationship is recorded as "other" rather than
+      "formalizes" because the provenance contract allows a substantive
+      relationship only when no source is an original-proof, and the other
+      five compared results are first presented here; this note carries the
+      substantive relationship in words. The page states no sum and no
+      exception list, so it bears on no other compared statement.
     license: "unknown"
     author_endorsement: "not-contacted"
   - title: "OEIS A084252, round(1/(r^n - round(r^n))) for the plastic number r"
