@@ -83,8 +83,14 @@ reduces to statement 3. That last step is a finite computation in `ℚ(ρ)` — 
 - OEIS A001608 (Perrin) carries R. Stephan's comment (2002) that `P(n) = round(ρⁿ)` for `n > 9`; statement
   4 proves it and shows the threshold sharp. OEIS A084252 (H. Bottomley, 2003) tabulates
   `round(1/(ρⁿ − round ρⁿ))`, the nearest prior tabulation of `‖ρⁿ‖`; it states no sum.
+- For a quadratic Pisot unit the series is elementary: the conjugate `θ'` is real with `|θ'| < 1`, so
+  `‖θⁿ‖ = |θ'|ⁿ` for all large `n` and the sum is a geometric series plus finitely many terms. For the
+  golden ratio this gives `S(φ) = φ⁻⁴ + ∑_{n ≥ 2} φ⁻²ⁿ = φ⁻²` (the value quoted below), and the same
+  two lines evaluate `S(θ)` for every quadratic Pisot unit. No novelty is claimed for the quadratic case.
 - We are not aware of a prior statement of the value `∑_{n ≥ 1} ‖ρⁿ‖² = ρ`, of a closed-form evaluation
-  of `∑ ‖θⁿ‖²` for any specific Pisot number, or of statements 5–6 as stated results. The search behind
+  of `∑ ‖θⁿ‖²` for any Pisot number of degree at least 3 (where the conjugates are complex and `‖θⁿ‖` is
+  not eventually a single geometric term, so the quadratic argument does not apply), or of statements
+  5–6 as stated results. The search behind
   that sentence, recorded on 2026-11-02, covered OEIS A060006, A001608 and A084252, MathWorld ("Plastic
   Constant"), Wikipedia ("Plastic ratio"), the CRC Concise Encyclopedia entry on Pisot–Vijayaraghavan
   constants, and six web searches (including Dubickas's and Zaïmi's work on `‖λαⁿ‖`, which concerns
