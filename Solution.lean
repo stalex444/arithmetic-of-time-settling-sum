@@ -7,9 +7,9 @@ public import PisotSumCubic
 /-!
 # The settling sum of the plastic number: proofs of the compared statements
 
-Each of the seven statements of `Challenge.lean` is proved here, with the identical statement, by
+Each of the six statements of `Challenge.lean` is proved here, with the identical statement, by
 transfer from the proof library (`PisotSum.lean`, `PisotSumCubic.lean`, namespace `PisotSum`). The
-four definitions of `Challenge.lean` are repeated verbatim.
+three definitions of `Challenge.lean` are repeated verbatim.
 
 * Statement 1: `PisotSum.plastic_settling_sum_of_root` (`SettlingSum.distInt` and
   `PisotSum.distInt` have the same body, so the transfer is definitional).
@@ -21,13 +21,13 @@ four definitions of `Challenge.lean` are repeated verbatim.
   `αᾱ = ρ² − 1`. Hence `‖α‖² = ρ² − 1 < 1`, the two geometric series converge, and
   `1/(1 − α²) + 1/(1 − ᾱ²) = (2 − s)/(1 − s + p)` with `s = α² + ᾱ² = 2 − ρ²`, `p = (ρ² − 1)²`,
   which is `ρ` by `ρ³ = ρ + 1`.
-* Statement 4: `PisotSum.abs_t_lt_half` (`|P(n) − ρⁿ| < 1/2` for `n ≥ 10`) with `round_eq_iff`,
-  after `SettlingSum.perrin = PisotSum.perrin` (same recurrence); the `n = 9` half from
-  `ρ⁹ = 3ρ² + 4ρ + 2 > 12.5` and `P(9) = 12`.
-* Statement 5: `PisotSum.cubic_hasSum_t_sq`, after `SettlingSum.powerSum = PisotSum.powerSum`
+* Statement 4: `PisotSum.cubic_hasSum_t_sq`, after `SettlingSum.powerSum = PisotSum.powerSum`
   (same recurrence) and `SettlingSum.geo = PisotSum.geoC` (same body).
-* Statement 6: `PisotSum.cubic_settling_sum_of_lt`, the same bridges.
-* Statement 7: `PisotSum.existsUnique_root`.
+* Statement 5: `PisotSum.cubic_settling_sum_of_lt`, the same bridges.
+* Statement 6: `PisotSum.existsUnique_root`.
+
+The Perrin rounding threshold (`round (ρⁿ) = P(n)` for `n ≥ 10`, not at `n = 9`) is proved in the
+library (`PisotSum.abs_t_lt_half` with `round_eq_iff`) and is not a compared statement.
 -/
 
 open Complex Finset ComplexConjugate
@@ -45,14 +45,6 @@ def powerSum (a b c : ℤ) : ℕ → ℤ
   | 2 => a ^ 2 - 2 * b
   | (n + 3) => a * powerSum a b c (n + 2) - b * powerSum a b c (n + 1) + c * powerSum a b c n
 
-/-- The Perrin sequence `3, 0, 2, 3, 2, 5, 5, 7, 10, 12, …`: `P(n) = ρⁿ + zⁿ + z̄ⁿ` for the roots
-`ρ, z, z̄` of `x³ − x − 1`. -/
-def perrin : ℕ → ℤ
-  | 0 => 3
-  | 1 => 0
-  | 2 => 2
-  | (n + 3) => perrin (n + 1) + perrin n
-
 /-- The geometric part `geo α = α²/(1 − α²) + ᾱ²/(1 − ᾱ²) + 2αᾱ/(1 − αᾱ)`: the sum of
 `αᵢαⱼ/(1 − αᵢαⱼ)` over the two conjugates `α, ᾱ` inside the unit disc. It is real. -/
 noncomputable def geo (α : ℂ) : ℂ :=
@@ -68,21 +60,6 @@ private theorem distInt_eq' (x : ℝ) : distInt x = PisotSum.distInt' x := rfl
 
 /-- `SettlingSum.geo` is `PisotSum.geoC` (same body). -/
 private theorem geo_eq (α : ℂ) : geo α = PisotSum.geoC α := rfl
-
-/-- `SettlingSum.perrin` is `PisotSum.perrin` (same recurrence; three consecutive values). -/
-private theorem perrin_eq_aux (n : ℕ) :
-    perrin n = PisotSum.perrin n ∧ perrin (n + 1) = PisotSum.perrin (n + 1) ∧
-      perrin (n + 2) = PisotSum.perrin (n + 2) := by
-  induction n with
-  | zero => exact ⟨rfl, rfl, rfl⟩
-  | succ n ih =>
-    obtain ⟨h0, h1, h2⟩ := ih
-    refine ⟨h1, h2, ?_⟩
-    show perrin (n + 3) = PisotSum.perrin (n + 3)
-    rw [perrin, PisotSum.perrin, h0, h1]
-
-/-- `SettlingSum.perrin` is `PisotSum.perrin`. -/
-private theorem perrin_eq (n : ℕ) : perrin n = PisotSum.perrin n := (perrin_eq_aux n).1
 
 /-- `SettlingSum.powerSum` is `PisotSum.powerSum` (same recurrence; three consecutive values). -/
 private theorem powerSum_eq_aux (a b c : ℤ) (n : ℕ) :
@@ -180,29 +157,7 @@ theorem plastic_even_trace {ρ : ℝ} {α : ℂ} (hρ : ρ ^ 3 = ρ + 1) (hα : 
     rw [inv_eq_one_div, inv_eq_one_div, div_add_div _ _ h1 h2, eq_div_iff (mul_ne_zero h1 h2)]
     linear_combination (1 - (ρ : ℂ)) * hA + (ρ : ℂ) * hB + (ρ : ℂ) ^ 2 * hρC
 
-/-- **4. Perrin numbers are the nearest integers to `ρⁿ` from `n = 10` on, and not at `n = 9`.** -/
-theorem perrin_round_threshold {ρ : ℝ} (hρ : ρ ^ 3 = ρ + 1) :
-    (∀ n : ℕ, 10 ≤ n → round (ρ ^ n) = perrin n) ∧ round (ρ ^ 9) ≠ perrin 9 := by
-  constructor
-  · intro n hn
-    have h := PisotSum.abs_t_lt_half hρ hn
-    rw [abs_lt] at h
-    unfold PisotSum.t at h
-    rw [perrin_eq]
-    exact round_eq_iff.2 ⟨by linarith [h.1], by linarith [h.2]⟩
-  · intro h
-    rw [round_eq_iff] at h
-    have p9 : perrin 9 = 12 := rfl
-    rw [p9] at h
-    have e9 : ρ ^ 9 = 3 * ρ ^ 2 + 4 * ρ + 2 := by
-      linear_combination (ρ ^ 6 + ρ ^ 4 + ρ ^ 3 + ρ ^ 2 + 2 * ρ + 2) * hρ
-    have hlo := (PisotSum.plastic_bounds hρ).1
-    have hlo2 := (PisotSum.rho_sq_bounds hρ).1
-    have h2 := h.2
-    push_cast at h2
-    linarith
-
-/-- **5. The Pisot series of the trace defect.** `∑_{n ≥ 1} (Sₙ − θⁿ)² = Re (geo α)`. -/
+/-- **4. The Pisot series of the trace defect.** `∑_{n ≥ 1} (Sₙ − θⁿ)² = Re (geo α)`. -/
 theorem cubic_trace_sum {θ : ℝ} {α : ℂ} {a b c : ℤ}
     (h1 : (θ : ℂ) + α + conj α = a) (h2 : (θ : ℂ) * (α + conj α) + α * conj α = b)
     (h3 : (θ : ℂ) * (α * conj α) = c) (hα : ‖α‖ < 1) :
@@ -213,7 +168,7 @@ theorem cubic_trace_sum {θ : ℝ} {α : ℂ} {a b c : ℤ}
   funext n
   simp only [PisotSum.tc, powerSum_eq]
 
-/-- **6. The settling sum of a cubic number with a complex conjugate pair.** For every `N` with
+/-- **5. The settling sum of a cubic number with a complex conjugate pair.** For every `N` with
 `‖α‖^N < 1/4`, `∑_{n ≥ 1} ‖θⁿ‖² = Re (geo α) + ∑_{n = 1}^{N} (‖θⁿ‖² − (Sₙ − θⁿ)²)`. -/
 theorem cubic_settling_sum {θ : ℝ} {α : ℂ} {a b c : ℤ}
     (h1 : (θ : ℂ) + α + conj α = a) (h2 : (θ : ℂ) * (α + conj α) + α * conj α = b)
@@ -226,7 +181,7 @@ theorem cubic_settling_sum {θ : ℝ} {α : ℂ} {a b c : ℤ}
   simp only [distInt_eq', powerSum_eq]
   exact h
 
-/-- **7.** `x³ = x + 1` has exactly one real solution. -/
+/-- **6.** `x³ = x + 1` has exactly one real solution. -/
 theorem existsUnique_root : ∃! x : ℝ, x ^ 3 = x + 1 :=
   PisotSum.existsUnique_root
 

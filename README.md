@@ -10,8 +10,9 @@ is also a theorem here: the two conjugates of `ρ` inside the unit disc have eve
 `−1`, `0` and `1`, so the resolvent trace `∑_{roots} 1/(1 − r²)` vanishes (the one remaining step, a finite identity in
 `ℚ(ρ)`, is computed, not explained; see below). The entry also proves the
 general cubic form (the Pisot series of any real `θ` with a complex conjugate pair inside the disc is a
-rational function of the conjugates plus a finite rounding correction) and the sharp threshold from which
-the Perrin numbers are the nearest integers to `ρⁿ` (`n ≥ 10`, and not at `n = 9`).
+rational function of the conjugates plus a finite rounding correction). The repository's library also
+proves, outside the compared set, the sharp threshold from which the Perrin numbers are the nearest
+integers to `ρⁿ` (`n ≥ 10`, and not at `n = 9`), a claim previously stated without proof at OEIS A001608.
 
 ## The objects
 
@@ -29,7 +30,7 @@ the Perrin numbers are the nearest integers to `ρⁿ` (`n ≥ 10`, and not at `
 
 ## The compared statements (namespace `SettlingSum`)
 
-In statements 1–4 the plastic number enters as any real `ρ` with `ρ³ = ρ + 1` (statement 7: there is
+In statements 1–3 the plastic number enters as any real `ρ` with `ρ³ = ρ + 1` (statement 6: there is
 exactly one). Sums over `n ≥ 1` are written `fun n ↦ ·^(n+1)` over `ℕ`.
 
 | # | name | statement |
@@ -37,14 +38,18 @@ exactly one). Sums over `n ≥ 1` are written `fun n ↦ ·^(n+1)` over `ℕ`.
 | 1 | `plastic_settling_sum` | `HasSum (fun n ↦ ‖ρ^(n+1)‖²) ρ`: `∑_{n ≥ 1} ‖ρⁿ‖² = ρ`. The headline. |
 | 2 | `plastic_tsum` | the `tsum` form, `∑' n, ‖ρ^(n+1)‖² = ρ`; a routine consequence of 1 |
 | 3 | `plastic_even_trace` | for every complex `α ≠ ρ` with `α³ = α + 1`: `∑_{n ≥ 0} (α^(2n) + ᾱ^(2n)) = ρ`. The even-power trace of the hidden pair is the generator; the mechanism behind 1 |
-| 4 | `perrin_round_threshold` | `round (ρⁿ) = P(n)` for every `n ≥ 10`, and `round (ρ⁹) ≠ P(9)` (`P(9) = 12`, `ρ⁹ = 12.56…`): the threshold in OEIS A001608 (R. Stephan, 2002), proved and shown sharp |
-| 5 | `cubic_trace_sum` | for real `θ`, complex `α` with `‖α‖ < 1`, integers `a, b, c` with `θ + α + ᾱ = a`, `θ(α + ᾱ) + αᾱ = b`, `θαᾱ = c`: `∑_{n ≥ 1} (Sₙ − θⁿ)² = Re (geo α)` |
-| 6 | `cubic_settling_sum` | under the same hypotheses, for every `N` with `‖α‖^N < 1/4`: `∑_{n ≥ 1} ‖θⁿ‖² = Re (geo α) + ∑_{n=1}^{N} (‖θⁿ‖² − (Sₙ − θⁿ)²)` |
-| 7 | `existsUnique_root` | `x³ = x + 1` has exactly one real solution |
+| 4 | `cubic_trace_sum` | for real `θ`, complex `α` with `‖α‖ < 1`, integers `a, b, c` with `θ + α + ᾱ = a`, `θ(α + ᾱ) + αᾱ = b`, `θαᾱ = c`: `∑_{n ≥ 1} (Sₙ − θⁿ)² = Re (geo α)` |
+| 5 | `cubic_settling_sum` | under the same hypotheses, for every `N` with `‖α‖^N < 1/4`: `∑_{n ≥ 1} ‖θⁿ‖² = Re (geo α) + ∑_{n=1}^{N} (‖θⁿ‖² − (Sₙ − θⁿ)²)` |
+| 6 | `existsUnique_root` | `x³ = x + 1` has exactly one real solution |
 
-Statements 5 and 6 assume neither `θ > 1` nor irreducibility nor that `a, b, c` come from a Pisot
+Not compared, proved in the library (`PisotSum.lean`): the Perrin rounding threshold, `round (ρⁿ) = P(n)`
+for every `n ≥ 10` and `round (ρ⁹) ≠ P(9)` (`P(9) = 12`, `ρ⁹ = 12.56…`), the claim of OEIS A001608
+(R. Stephan, 2002). It was statement 4 of the withdrawn submissions of 2026-11-03/04 and was removed from
+the compared set on 2026-11-05 so that every compared result is one first presented here.
+
+Statements 4 and 5 assume neither `θ > 1` nor irreducibility nor that `a, b, c` come from a Pisot
 number: a real `θ`, a complex `α` with `‖α‖ < 1` and the three Vieta equations are the whole
-hypothesis. Statement 1 is statement 6 at `a = 0, b = −1, c = 1` with `N = 10` (the smallest `N` with
+hypothesis. Statement 1 is statement 5 at `a = 0, b = −1, c = 1` with `N = 10` (the smallest `N` with
 `ρ^(−N/2) < 1/4`; the `n = 10` correction term is zero), where
 `Re (geo α) = 2ρ² + 3ρ − 2` and the correction is `2 − 2ρ − 2ρ²`, summing to `ρ`. Every compared
 theorem depends on `propext`, `Classical.choice` and `Quot.sound` only.
@@ -54,7 +59,7 @@ theorem depends on `propext`, `Classical.choice` and `Quot.sound` only.
 1. `ρⁿ = P(n) − t_n` with `t_n = zⁿ + z̄ⁿ`, so `‖ρⁿ‖ = |t_n − round t_n|`, and `‖ρⁿ‖ = |t_n|` whenever
    `|t_n| < 1/2`.
 2. `|t_n| ≤ 2|z|ⁿ = 2ρ^(−n/2)`, and `2ρ^(−5) = 0.490… < 1/2`, so `‖ρⁿ‖ = |t_n|` for every `n ≥ 10`
-   (statement 4 is this bound with the single check at `n = 9`).
+   (the library's rounding threshold, not compared, is this bound with the single check at `n = 9`).
 3. `∑_{n ≥ 1} t_n² = ∑ (z²)ⁿ + ∑ (z̄²)ⁿ + 2 ∑ (zz̄)ⁿ`, three geometric series (Mathlib's
    `hasSum_geometric_of_norm_lt_one`), with sum `Re (geo z) = 2ρ² + 3ρ − 2 = 5.4839…` in `ℚ(ρ)`.
 4. The exceptions are `n ∈ {1, 3, 4, 5, 8, 9}`, with `round t_n = −1, 1, −1, 1, 1, −1`; at each,
@@ -80,8 +85,9 @@ reduces to statement 3. That last step is a finite computation in `ℚ(ρ)` — 
   is not part of it. Siegel (1944): `ρ` is the smallest Pisot number.
 - Salem (1944) gives an explicit upper bound for the series, `∑_{n ≥ 0} sin²(πλθⁿ) ≤ π²(2θ+1)²/(θ−1)²`
   for some `1 ≤ λ < θ`: a bound, not an evaluation.
-- OEIS A001608 (Perrin) carries R. Stephan's comment (2002) that `P(n) = round(ρⁿ)` for `n > 9`; statement
-  4 proves it and shows the threshold sharp. OEIS A084252 (H. Bottomley, 2003) tabulates
+- OEIS A001608 (Perrin) carries R. Stephan's comment (2002) that `P(n) = round(ρⁿ)` for `n > 9`; the
+  library (`PisotSum.abs_t_lt_half`) proves it and shows the threshold sharp, but no compared statement
+  is that claim. OEIS A084252 (H. Bottomley, 2003) tabulates
   `round(1/(ρⁿ − round ρⁿ))`, the nearest prior tabulation of `‖ρⁿ‖`; it states no sum.
 - For a quadratic Pisot unit the series is elementary: the conjugate `θ'` is real with `|θ'| < 1`, so
   `‖θⁿ‖ = |θ'|ⁿ` for all large `n` and the sum is a geometric series plus finitely many terms. For the
@@ -90,21 +96,21 @@ reduces to statement 3. That last step is a finite computation in `ℚ(ρ)` — 
 - We are not aware of a prior statement of the value `∑_{n ≥ 1} ‖ρⁿ‖² = ρ`, of a closed-form evaluation
   of `∑ ‖θⁿ‖²` for any Pisot number of degree at least 3 (where the conjugates are complex and `‖θⁿ‖` is
   not eventually a single geometric term, so the quadratic argument does not apply), or of statements
-  5–6 as stated results. The search behind
+  4–5 as stated results. The search behind
   that sentence, recorded on 2026-11-02, covered OEIS A060006, A001608 and A084252, MathWorld ("Plastic
   Constant"), Wikipedia ("Plastic ratio"), the CRC Concise Encyclopedia entry on Pisot–Vijayaraghavan
   constants, and six web searches (including Dubickas's and Zaïmi's work on `‖λαⁿ‖`, which concerns
   limits and lower bounds, not series values). Not read: Bertin et al., *Pisot and Salem Numbers*
   (1992), chapter 5; Pisot's 1938 paper itself; MathSciNet. Pisot 1938, Siegel 1944 and Salem 1944 are
   cited from the CRC reference list, not from the originals. The general formula
-  `∑_{n ≥ 1} (∑ᵢ αᵢⁿ)² = ∑_{i,j} αᵢαⱼ/(1 − αᵢαⱼ)` behind statement 5 is a two-line consequence of
+  `∑_{n ≥ 1} (∑ᵢ αᵢⁿ)² = ∑_{i,j} αᵢαⱼ/(1 − αᵢαⱼ)` behind statement 4 is a two-line consequence of
   expanding the square; no novelty is claimed for it.
 - Not to be confused with the identity `ρ = ∑_{n ≥ 0} ρ^(−5n)` (equivalently `ρ⁵ = ρ⁴ + 1`), a plain
   geometric series in `ρ` with no nearest-integer content.
 
 ## What is not claimed
 
-- Pisot's theorem (convergence iff Pisot, in every degree) is not formalized. Statements 5–6 give the
+- Pisot's theorem (convergence iff Pisot, in every degree) is not formalized. Statements 4–5 give the
   convergent value for the cubic complex-pair case only, and the divergence for non-Pisot numbers is
   not proved here.
 - The census is computed, not formalized. Among 109 Pisot units of degree 2–4 with small coefficients
@@ -115,19 +121,19 @@ reduces to statement 3. That last step is a finite computation in `ℚ(ρ)` — 
   and the tribonacci number `0.5685…`. Whether `S(θ) = θ` characterizes `ρ` among Pisot numbers is open.
 - The exact value `2ρ² + 3ρ − 2` is an algebraic integer because `ρ ± 1` are units (`f(±1) = −1`); the
   census shows other cubics acquiring denominators from `f(1)·f(−1)`. Only the `ρ` case is in the kernel.
-- Statements 2 and 7 are routine (the `tsum` form of 1; uniqueness of the real root).
+- Statements 2 and 6 are routine (the `tsum` form of 1; uniqueness of the real root).
 - The content first presented here is the exact value (statement 1), its mechanism (statement 3: the
   resolvent trace at `±1` vanishes for `x³ − x − 1`, a principle, not a computation) and the general cubic
-  form (statements 5–6). Statement 4 is different in kind: its claim is prior work (R. Stephan's 2002
-  comment on OEIS A001608, stated there without proof), which this entry proves and shows sharp; the
-  provenance metadata records it so. The three geometric series and the Perrin trace identity
+  form (statements 4–5). The Perrin rounding threshold is different in kind: its claim is prior work
+  (R. Stephan's 2002 comment on OEIS A001608, stated there without proof), which the library proves and
+  shows sharp; it is therefore not a compared statement. The three geometric series and the Perrin trace identity
   `P(n) = ρⁿ + zⁿ + z̄ⁿ` are classical; the six-exception bookkeeping is a finite computation.
 
 ## Application to time (no compared statement asserts it)
 
 In the arithmetic of time (the registered entries below) the tick is multiplication by `ρ` on `ℚ(ρ)`
 and the record is the integer lattice: the Perrin integers are the settled values of the powers
-(statement 4). Read so, statement 1 says that the total squared distance by which the tick history
+(the library's rounding threshold, not compared). Read so, statement 1 says that the total squared distance by which the tick history
 falls short of its record is exactly one tick's unit, `ρ`, and statement 3 says that this unit is
 returned by the two conjugates that are not seen — the generator is the trace of its own hidden
 places. The quartic companion `Q`, `Q⁴ = Q + 1`, is not Pisot (a conjugate pair of modulus `1.063…`),
@@ -193,13 +199,14 @@ build record, axiom audit and statement-identity checks are in `BUILD.txt`.
 
 ## Files
 
-- `Challenge.lean`: the seven statements, Mathlib-only, as `sorry` placeholders, with the four
-  definitions the entry adds (`distInt`, `powerSum`, `perrin`, `geo`).
+- `Challenge.lean`: the six statements, Mathlib-only, as `sorry` placeholders, with the three
+  definitions the entry adds (`distInt`, `powerSum`, `geo`).
 - `Solution.lean`: the same statements and definitions, verbatim, the statements proved by transfer
   from the library.
 - `PisotSum.lean`: the plastic number — the trace identity with the Perrin sequence, the bound
-  `|t_n| < 1/2` for `n ≥ 10`, the three geometric series, the six corrections, and the real root.
-- `PisotSumCubic.lean`: the general cubic form (statements 5–6) for any real `θ` with a complex
+  `|t_n| < 1/2` for `n ≥ 10` (the rounding threshold, not compared), the three geometric series, the six
+  corrections, and the real root.
+- `PisotSumCubic.lean`: the general cubic form (statements 4–5) for any real `θ` with a complex
   conjugate pair inside the unit disc.
 - `comparator.json`, `formalization.yaml`, `BUILD.txt`: the comparator configuration, the registry
   metadata, and the build record.
